@@ -1,0 +1,324 @@
+
+    :root {
+      --primary-color: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary-color: #64748b;
+      --accent-color: #f59e0b;
+      --text-light: #f8fafc;
+      --text-dark: #1e293b;
+      --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+    }
+
+  html, body, #root, .app-container {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1; /* pousse le footer en bas */
+}
+
+
+    body {
+      font-family: 'Inter', sans-serif;
+    /*  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);*/
+      color: var(--text-dark);
+      display: flex;
+      flex-direction: column;
+    }
+.my-img {
+  border-radius: 8px;
+}
+
+    /* Navbar */
+    .navbar-custom {
+      background: var(--gradient-bg) !important;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-medium);
+      transition: all 0.3s ease;
+    }
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--text-light) !important;
+    }
+    .navbar-nav .nav-link {
+      color: var(--text-light) !important;
+      font-weight: 500;
+      margin: 0 0.5rem;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    .navbar-nav .nav-link:hover {
+      background: rgba(255,255,255,0.1);
+      color: var(--accent-color) !important;
+    }
+    .btn-warning {
+      font-weight: 600;
+      border-radius: 8px;
+      box-shadow: var(--shadow-soft);
+      transition: 0.3s;
+    }
+    .btn-warning:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Hero */
+    .hero-section {
+     /* background: var(--gradient-bg); */
+      background: url("../../public/images/background/plage-Toliara-Madagascar.jpg") no-repeat center center/cover;
+     color: white;
+     padding: 5rem 0;
+     text-align: center;
+     position: relative;
+     margin-bottom: 20px;   
+    }
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 700;
+    }
+    .hero-subtitle {
+      font-size: 1.25rem;
+      opacity: 0.9;
+      max-width: 650px;
+      margin: auto;
+    }
+
+    .search-bar {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.search-bar input {
+  border-radius: 30px;
+  padding: 12px 20px;
+  border: none;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.search-bar input:focus {
+  outline: none;
+  box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+}
+
+.search-bar button {
+  border-radius: 30px;
+  padding: 10px 25px;
+  font-weight: bold;
+}
+
+
+
+    /* Features */
+    .feature-card {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: var(--shadow-soft);
+      transition: 0.3s;
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-medium);
+    }
+    .feature-icon {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+
+
+
+
+/* ====== MODALE CONTACT ====== */
+.modal-content {
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  border: none;
+  overflow: hidden;
+}
+
+/* Header */
+.modal-header {
+  background: var(--gradient-bg); /* violet dégradé */
+  color: var(--text-light);
+  border-bottom: none;
+}
+
+.modal-header .modal-title {
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.modal-header .btn-close {
+  filter: brightness(0) invert(1); /* bouton fermer en blanc */
+  opacity: 0.8;
+}
+.modal-header .btn-close:hover {
+  opacity: 1;
+}
+
+/* Body */
+.modal-body {
+  padding: 2rem;
+  background: #f9fafb;
+}
+
+.modal-body .form-label {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.modal-body input,
+.modal-body textarea {
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  transition: all 0.3s ease;
+}
+
+.modal-body input:focus,
+.modal-body textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  outline: none;
+}
+
+/* Footer */
+.modal-footer {
+  border-top: none;
+  padding: 1.5rem;
+  background: #f1f5f9;
+}
+
+/* Boutons */
+.modal-footer .btn-secondary {
+  background: var(--secondary-color);
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+.modal-footer .btn-secondary:hover {
+  background: #475569;
+}
+
+.modal-footer .btn-primary {
+  background: var(--accent-color); /* jaune */
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+.modal-footer .btn-primary:hover {
+  background: #eab308;
+  transform: translateY(-2px);
+}
+
+
+/* ===== RESPONSIVE MODAL ===== */
+
+/* Écrans petits (mobile ≤ 576px) */
+@media (max-width: 576px) {
+  .modal-dialog {
+    margin: 10px;
+    max-width: 100%;
+  }
+
+  .modal-content {
+    border-radius: 12px;
+  }
+
+  .modal-header, 
+  .modal-footer {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .modal-header .btn-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
+
+  .modal-body {
+    padding: 1.2rem;
+  }
+
+  .modal-body input,
+  .modal-body textarea {
+    font-size: 0.95rem;
+  }
+
+  .modal-footer button {
+    width: 100%;  /* Boutons plein écran sur mobile */
+  }
+}
+
+/* Tablette (577px à 768px) */
+@media (max-width: 768px) {
+  .modal-dialog {
+    max-width: 90%;
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+  }
+}
+
+/* Grand écran (≥ 992px) */
+@media (min-width: 992px) {
+  .modal-dialog {
+    max-width: 600px; /* taille fixe élégante */
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    /* Main Content */
+    .main-content {
+      flex: 1;
+    }
+
+    /* Footer */
+    footer {
+      background: #1e293b;
+      color: var(--text-light);
+      margin-top: auto;
+    }
+    footer a {
+      color: var(--text-light);
+      transition: 0.3s;
+    }
+    footer a:hover {
+      color: var(--accent-color);
+    }
+
+
+
+
+
+
+
+
+
+
+  

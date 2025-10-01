@@ -1,0 +1,336 @@
+.enveloppe {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.liste-cartes {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    gap: 20px;
+    padding: 20px;
+}
+
+.carte {
+    flex: 0 0 calc(100% / var(--cartes-par-diapositive));
+    max-width: calc(100% / var(--cartes-par-diapositive));
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #fff;
+    height: 400px;
+}
+
+.carte:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.image-carte {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px 15px 0 0;
+}
+
+.image-carte img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carte:hover .image-carte img {
+    transform: scale(1.1);
+}
+
+.image-carte .etiquette-carte {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    color: #6366f1;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.7rem;
+    padding: 6px 12px;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.95);
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.contenu-carte {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+.contenu-carte .titre-carte {
+    color: #111111;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 10px;
+}
+
+.contenu-carte .texte-carte {
+    color: #747474;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    flex-grow: 1;
+}
+
+.contenu-carte .pied-carte {
+    display: flex;
+    padding-top: 12px;
+    align-items: center;
+    margin-top: auto;
+    justify-content: space-between;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.pied-carte .profil-carte {
+    display: flex;
+    align-items: center;
+}
+
+.profil-carte img {
+    width: 30px;
+    height: 30px;
+    margin-right: 8px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.profil-carte .info-profil-carte {
+    display: flex;
+    flex-direction: column;
+}
+
+.profil-carte .nom-profil-carte {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #202020;
+}
+
+.profil-carte .role-profil-carte {
+    font-size: 0.65rem;
+    color: #7a7a7a;
+}
+
+.pied-carte .bouton-carte {
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+}
+
+.bouton-carte:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+}
+
+.bouton-navigation {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+.bouton-navigation:hover {
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+}
+
+.bouton-navigation:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: translateY(-50%);
+}
+
+.bouton-prec {
+    left: 10px;
+}
+
+.bouton-suiv {
+    right: 10px;
+}
+
+.controles-carrousel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.conteneur-points {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.point {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(99, 102, 241, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.point.actif {
+    background: #6366f1;
+    transform: scale(1.2);
+}
+
+.barre-progression {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: #6366f1;
+    transition: width 0.1s linear;
+    border-radius: 0 0 20px 0;
+}
+
+@keyframes ondulation {
+    to {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+/* DESKTOP - Default styles above work for desktop */
+
+/* TABLETTE (768px - 1023px) */
+@media screen and (max-width: 1023px) and (min-width: 768px) {
+    .enveloppe {
+        margin: 0 15px;
+    }
+    
+    .carte {
+        height: 380px;
+    }
+    
+    .image-carte {
+        height: 160px;
+    }
+    
+    .bouton-navigation {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+    
+    .bouton-prec {
+        left: 5px;
+    }
+    
+    .bouton-suiv {
+        right: 5px;
+    }
+}
+
+/* TÉLÉPHONE (jusqu'à 767px) */
+@media screen and (max-width: 767px) {
+    .enveloppe {
+        border-radius: 15px;
+        margin: 0 10px;
+    }
+    
+    .carte {
+        height: 350px;
+        min-width: 280px;
+    }
+    
+    .image-carte {
+        height: 140px;
+    }
+    
+    .contenu-carte {
+        padding: 12px;
+    }
+    
+    .contenu-carte .titre-carte {
+        font-size: 0.9rem;
+    }
+    
+    .contenu-carte .texte-carte {
+        font-size: 0.75rem;
+    }
+    
+    .bouton-navigation {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+    }
+    
+    .bouton-prec {
+        left: 5px;
+    }
+    
+    .bouton-suiv {
+        right: 5px;
+    }
+    
+    .point {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+/* TRÈS PETIT TÉLÉPHONE (jusqu'à 480px) */
+@media screen and (max-width: 480px) {
+    .enveloppe {
+        margin: 0 5px;
+    }
+    
+    .carte {
+        height: 320px;
+        min-width: 250px;
+    }
+    
+    .image-carte {
+        height: 120px;
+    }
+    
+    .bouton-navigation {
+        width: 28px;
+        height: 28px;
+        font-size: 0.7rem;
+    }
+    
+    .bouton-prec {
+        left: 2px;
+    }
+    
+    .bouton-suiv {
+        right: 2px;
+    }
+}
