@@ -59,50 +59,6 @@
 
 
 
-h2.text-center {
-  font-size: 2rem;           /* Taille du texte */
-  font-weight: 700;          /* Texte en gras */
-  text-align: center;  
-  margin-top: 40px;      /* Centré */
-  margin-bottom: 1.5rem;     /* Espace en bas */
-  position: relative;        /* Nécessaire pour ajouter un effet décoratif */
-  color: #2c3e50;            /* Couleur principale */
-  text-transform: uppercase; /* Met en majuscules */
-  letter-spacing: 2px;       /* Espacement entre lettres */
-}
-
-/* Ligne décorative en dessous */
-h2.text-center::after {
-  content: "";
-  display: block;
-  width: 80px;
-  height: 4px;
-  background: linear-gradient(90deg, #808080, #A9A9A9);
-  margin: 0.5rem auto 0; /* centré */
-  border-radius: 2px;
-}
-
-.search-box {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-}
-
-.search-box input {
-  width: 60%;
-  max-width: 400px;
-  padding: 10px 15px;
-  border: 2px solid #ff9800;
-  border-radius: 8px;
-  font-size: 16px;
-  outline: none;
-  transition: 0.3s;
-}
-
-.search-box input:focus {
-  border-color: #e68900;
-  box-shadow: 0 0 6px rgba(255, 152, 0, 0.5);
-}
 
 
 
@@ -115,6 +71,7 @@ h2.text-center::after {
   display: flex;
   flex-direction: column;
   height: 100%;
+
 }
 
 .card:hover {
@@ -213,8 +170,24 @@ h2.text-center::after {
   text-decoration: none;
   font-size: 14px;
   transition: background 0.3s ease;
+  width: 123px;
+  margin: 0 auto;
 }
 
 .card-button:hover {
   background: #e68900;
+}
+/* Responsive */
+@media (max-width: 576px) {
+  .card-image {
+    height: 150px;
+  }
+
+  .card-title {
+    font-size: 18px;
+  }
+
+  .card-text {
+    font-size: 14px;
+  }
 }

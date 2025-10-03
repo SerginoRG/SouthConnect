@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import "../Styles/hotel.css";
+import "../Styles/Carde.css";
+import { SearchContext } from "../context/SearchContext";
 
 function Boutique() {
+  const { searchTerm } = useContext(SearchContext); // 📌 recherche globale
   const [produits, setProduits] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    axios.get("http://127.0.0.1:8000/api/produits/Boutique")
-      .then(response => setProduits(response.data))
-      .catch(error => console.error(error));
+    axios
+      .get("http://127.0.0.1:8000/api/produits/Boutique")
+      .then((response) => setProduits(response.data))
+      .catch((error) => console.error(error));
   }, []);
 
   const filteredProduits = produits.filter(
@@ -21,29 +23,23 @@ function Boutique() {
   return (
     <section className="content-section py-5">
       <div className="container">
-        <h2 className="text-center mb-4">Secteur Boutique</h2>
-
-        <div className="search-box">
-          <input
-            type="text"
-            placeholder="Rechercher une boutique..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-
         <div className="row g-4 mt-4">
           {filteredProduits.map((item, index) => (
             <div className="col-md-4" key={index}>
               <div className="card">
                 <div className="card-image">
-                  <img src={`http://127.0.0.1:8000/storage/${item.image_produit}`} alt={item.title} />
-                  
+                  <img
+                    src={`http://127.0.0.1:8000/storage/${item.image_produit}`}
+                    alt={item.title}
+                  />
+                  <p className="card-tag">{item.categorie}</p>
                 </div>
                 <div className="card-content">
                   <h3 className="card-title">{item.title}</h3>
                   <p className="card-text">{item.description}</p>
-                   <a href="https://example.com" className="card-button">En savoir plus</a>
+                  <a href="https://example.com" className="card-button">
+                    En savoir plus
+                  </a>
                 </div>
               </div>
             </div>

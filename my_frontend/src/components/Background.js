@@ -1,9 +1,10 @@
-// src/components/Background.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../Styles/style.css";
+import { SearchContext } from "../context/SearchContext";
 
-export default function Background() {   // <-- Ici avec Majuscule
-  const [searchTerm, setSearchTerm] = useState("");
+export default function Background() {
+  const { searchTerm, setSearchTerm } = useContext(SearchContext); // contexte
+
   const [bgIndex, setBgIndex] = useState(0);
 
   const backgrounds = [
@@ -17,7 +18,7 @@ export default function Background() {   // <-- Ici avec Majuscule
       setBgIndex((prevIndex) => (prevIndex + 1) % backgrounds.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [backgrounds.length]); // ⚡ Ajouté backgrounds.length dans le tableau des dépendances
+  }, [backgrounds.length]);
 
   const handlePrevious = () => {
     setBgIndex((prevIndex) =>
@@ -31,7 +32,6 @@ export default function Background() {   // <-- Ici avec Majuscule
 
   return (
     <>
-      {/* Hero */}
       <section
         className="hero-section"
         style={{
@@ -39,12 +39,10 @@ export default function Background() {   // <-- Ici avec Majuscule
           transition: "background 1s ease-in-out",
         }}
       >
-        {/* Bouton Previous */}
         <button className="hero-btn hero-btn-left" onClick={handlePrevious}>
           &lt;
         </button>
 
-        {/* Bouton Next */}
         <button className="hero-btn hero-btn-right" onClick={handleNext}>
           &gt;
         </button>
@@ -53,7 +51,8 @@ export default function Background() {   // <-- Ici avec Majuscule
           <div className="hero-content text-center">
             <h1 className="hero-title">Bienvenue sur SouthConnect</h1>
             <p className="hero-subtitle">
-              Découvrez nos services exceptionnels dans le secteur du tourisme et plus encore
+              Découvrez nos services exceptionnels dans le secteur du tourisme
+              et plus encore
             </p>
 
             <div className="search-bar mt-4">
