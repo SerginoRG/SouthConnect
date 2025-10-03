@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import "../Styles/publication.css";
 
+
 function Publication() {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -54,7 +55,7 @@ function Publication() {
     <section className="publication-section py-5">
       <div className="container">
         <h2 className="text-center mb-4">Publications</h2>
-
+ 
         {/* Barre de recherche */}
         <div className="search-container">
           <input
@@ -66,6 +67,8 @@ function Publication() {
           />
           <i className="fa-solid fa-magnifying-glass search-icon"></i>
         </div>
+
+   
 
         <div className="row g-4">
           {filteredPublications.map((item, index) => (

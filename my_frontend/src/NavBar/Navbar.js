@@ -49,24 +49,30 @@ function Navbar() {
                 <i className="fas fa-industry me-1"></i>Secteur
               </Link>
               <ul className="dropdown-menu" aria-labelledby="secteurDropdown">
-                <li>
-                  <Link className="dropdown-item" to="/secteur/tourisme">
-                    Tourisme
-                  </Link>
-                </li>
+               {/*
                 <li>
                   <Link className="dropdown-item" to="/secteur/hotel">
                     Hôtel
                   </Link>
                 </li>
+
+                */}
+
                 <li>
                   <Link className="dropdown-item" to="/secteur/Boutique">
                     Boutique
                   </Link>
                 </li>
+                 {/*
                  <li>
                   <Link className="dropdown-item" to="/secteur/resto">
                     Restaurant
+                  </Link>
+                </li>
+                  */}
+                   <li>
+                  <Link className="dropdown-item" to="/secteur/tourisme">
+                    Tourisme
                   </Link>
                 </li>
                

@@ -1,9 +1,11 @@
 // src/Page/Hotel.js
-import React, { useState } from "react";
-import "../Styles/hotel.css"; // <-- On lie le fichier CSS ici
+import React, { useState, useEffect, useRef } from "react";
+import "../Styles/hotel.css";
+
 
 function Hotel() {
   const [searchTerm, setSearchTerm] = useState("");
+  const cardRefs = useRef([]);
 
   const elements = [
     {
@@ -26,7 +28,6 @@ function Hotel() {
       profileRole: "Manager",
       stars: 1
     },
-
     {
       img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=250&fit=crop",
       tag: "Le Grand Palais",
@@ -45,7 +46,7 @@ function Hotel() {
       profileImg: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cGVyc29ufGVufDB8fDB8fHww",
       profileName: "Jean Martin",
       profileRole: "Manager",
-       stars:1 
+      stars: 1 
     },
     {
       img: "https://images.unsplash.com/photo-1455587734955-081b22074882?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8aG90ZWx8ZW58MHx8MHx8fDA%3D",
@@ -55,7 +56,7 @@ function Hotel() {
       profileImg: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=40&h=40&fit=crop&crop=face",
       profileName: "Sophie Bernard",
       profileRole: "Manager",
-       stars: 3
+      stars: 3
     },
     {
       img: "https://plus.unsplash.com/premium_photo-1661929519129-7a76946c1d38?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8aG90ZWx8ZW58MHx8MHx8fDA%3D",
@@ -65,7 +66,7 @@ function Hotel() {
       profileImg: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face",
       profileName: "Claire Dupont",
       profileRole: "Manager",
-       stars:2
+      stars: 2
     },
     {
       img: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGhvdGVsfGVufDB8fDB8fHww",
@@ -75,7 +76,7 @@ function Hotel() {
       profileImg: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=40&h=40&fit=crop&crop=face",
       profileName: "Luc Moreau",
       profileRole: "Manager",
-       stars:4
+      stars: 4
     },
     {
       img: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=250&fit=crop",
@@ -85,10 +86,8 @@ function Hotel() {
       profileImg: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face",
       profileName: "Pauline Lefèvre",
       profileRole: "Directrice",
-       stars:0
+      stars: 0
     }
-
-    // ... autres hôtels
   ];
 
   // Filtrage automatique selon recherche
@@ -98,6 +97,39 @@ function Hotel() {
       item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.profileName.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Animation au scroll avec Intersection Observer
+  useEffect(() => {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add("slide-in-visible");
+          }, index * 100); // Délai progressif
+        }
+      });
+    },
+    {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px",
+    }
+  );
+
+  // copie locale
+  const cards = cardRefs.current;
+
+  cards.forEach((card) => {
+    if (card) observer.observe(card);
+  });
+
+  return () => {
+    cards.forEach((card) => {
+      if (card) observer.unobserve(card);
+    });
+  };
+}, [filteredElements]);
+
 
   return (
     <section className="content-section py-5">
@@ -113,11 +145,17 @@ function Hotel() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-
+        
+ 
+  
         <div className="row g-4 mt-4">
           {filteredElements.map((item, index) => (
-            <div className="col-md-4" key={index}>
-              <div className="card">
+            <div 
+              className="col-md-4" 
+              key={index}
+              ref={(el) => (cardRefs.current[index] = el)}
+            >
+              <div className="card slide-in">
                 <div className="card-image">
                   <img src={item.img} alt={item.title} />
                   <p className="card-tag">{item.tag}</p>

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import "../Styles/hotel.css"; // <-- Fichier CSS
 
+
 function Resto() {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -69,7 +70,7 @@ function Resto() {
     <section className="content-section py-5">
       <div className="container">
         <h2 className="text-center mb-4">Secteur Restaurant</h2>
-
+  
         {/* Barre de recherche */}
         <div className="search-box">
           <input
@@ -79,6 +80,7 @@ function Resto() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
+ 
 
         <div className="row g-4 mt-4">
           {filteredElements.map((item, index) => (
