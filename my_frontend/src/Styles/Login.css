@@ -1,0 +1,256 @@
+.login-page {
+  display: flex;
+  justify-content: center; /* Centre horizontalement */
+  align-items: center;     /* Centre verticalement */
+  height: 100vh;           /* Prend toute la hauteur de l'écran */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);      /* Fond optionnel */
+}
+
+.login-wrapper {
+  /* background: rgba(255, 255, 255, 0.95); */
+  background-color: #2c3e50;
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  width: 400px;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-wrapper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb); 
+  /* background-color: black; */
+  border-radius: 20px 20px 0 0;
+}
+
+.login-logo {
+  margin-bottom: 30px;
+}
+
+.login-logo img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #fff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.login-logo img:hover {
+  transform: scale(1.05);
+}
+
+.login-container h2 {
+  /* color: #333; */
+  color: #fff;
+  margin-bottom: 30px;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.login-input-group {
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+.login-input-group label {
+  display: block;
+  margin-bottom: 8px;
+  /* color: #555; */
+  color: #d1cbcb;
+  font-weight: 500;
+  font-size: 17px;
+}
+
+.login-input-group input {
+  width: 100%;
+  padding: 15px 20px;
+  border: 2px solid #e1e5e9;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.login-input-group input:focus {
+  outline: none;
+  border-color: #667eea;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
+}
+
+.login-input-group input::placeholder {
+  color: #adb5bd;
+}
+
+.login-submit-btn {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.login-submit-btn:active {
+  transform: translateY(0);
+}
+
+.login-submit-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.login-submit-btn:hover::before {
+  left: 100%;
+}
+
+.login-error-msg {
+  color: #e74c3c;
+  font-size: 14px;
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(231, 76, 60, 0.1);
+  border: 1px solid rgba(231, 76, 60, 0.2);
+  display: none;
+}
+
+.login-error-msg.show {
+  display: block;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .login-wrapper {
+    padding: 30px 20px;
+    margin: 10px;
+  }
+
+  .login-container h2 {
+    font-size: 24px;
+  }
+
+  .login-logo img {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+/* Animation d'entrée */
+.login-wrapper {
+  animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Effet de focus sur les inputs */
+.login-input-group {
+  position: relative;
+}
+
+.login-input-group input:focus + label,
+.login-input-group input:not(:placeholder-shown) + label {
+  transform: translateY(-25px) scale(0.8);
+  color: #667eea;
+}
+
+/* Liens d'aide (oubli de mot de passe / inscription) */
+.login-auth-links {
+  margin-top: 18px;
+  display: grid;
+  gap: 10px;
+  text-align: center;
+}
+
+.login-auth-links a {
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+/* Mot de passe oublié */
+.login-forgot-link {
+  font-size: 14px;
+  color: #5563dd;
+}
+
+/* Ligne d'inscription */
+.login-signup-text {
+  font-size: 14px;
+  color: #555;
+}
+
+.login-signup-text .login-signup-link {
+  color: #764ba2;
+}
+
+/* Effets hover/focus accessibles */
+.login-auth-links a:hover {
+  text-decoration: underline;
+  text-shadow: 0 0 0.5px currentColor;
+}
+
+.login-auth-links a:focus {
+  outline: 2px solid rgba(102, 126, 234, 0.45);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Responsive léger */
+@media (max-width: 480px) {
+  .login-auth-links {
+    gap: 8px;
+  }
+}

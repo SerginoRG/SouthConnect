@@ -1,6 +1,6 @@
 // src/Page/Carousel.js
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import "../Styles/Carousel.css";
+import "../../Styles/Carousel.css";
 
 export default function Carousel() {
   const cardsData = [

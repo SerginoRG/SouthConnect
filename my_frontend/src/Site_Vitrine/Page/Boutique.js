@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import "../Styles/Carde.css";
-import { SearchContext } from "../context/SearchContext";
+import "../../Styles/Carde.css";
+import { SearchContext } from "../Context/SearchContext";
 
 function Boutique() {
   const { searchTerm } = useContext(SearchContext); // 📌 recherche globale

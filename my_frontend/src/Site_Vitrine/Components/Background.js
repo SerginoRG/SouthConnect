@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import "../Styles/style.css";
-import { SearchContext } from "../context/SearchContext";
+import "../../Styles/style.css";
+import { SearchContext } from "../Context/SearchContext";
 
 export default function Background() {
   const { searchTerm, setSearchTerm } = useContext(SearchContext); // contexte

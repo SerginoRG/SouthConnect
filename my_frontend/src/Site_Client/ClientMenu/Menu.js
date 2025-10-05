@@ -2,15 +2,15 @@
 import React, { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { FaBars, FaBox, FaVial } from "react-icons/fa";
-import "../Styles/Menu.css";
+import "../../Styles/Menu.css";
 
 function Menu() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
 
   const menuItems = [
-    { path: "/admin/produit", label: "Produits", icon: <FaBox /> },
-    { path: "/admin/test", label: "Test", icon: <FaVial /> }
+    { path: "/Client/Produit", label: "Produits", icon: <FaBox /> },
+    { path: "/Client/Test", label: "Test", icon: <FaVial /> }
   ];
 
   return (

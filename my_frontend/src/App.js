@@ -3,24 +3,29 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // Site vitrine
-import Home from "./Page/Home";
-import Tourisme from "./Page/Tourisme";
-import Navbar from "./NavBar/Navbar";
-import Footer from "./NavBar/Footer";
-import Publication from "./Page/Publication";
-import Boutique from "./Page/Boutique";
-import ContactModal from "./Page/ContactModal";
-import Background from "./components/Background";
+import Home from "./Site_Vitrine/Page/Home";
+import Tourisme from "./Site_Vitrine/Page/Tourisme";
+import Vitrinemenu from "./Site_Vitrine/NavBar/Vitrinemenu";
+import Footer from "./Site_Vitrine/NavBar/Footer";
+import Publication from "./Site_Vitrine/Page/Publication";
+import Boutique from "./Site_Vitrine/Page/Boutique";
+import ContactModal from "./Site_Vitrine/Page/ContactModal";
+import Background from "./Site_Vitrine/Components/Background";
 
-// Admin
-import Acceuil from "./Admin/Acceuil";
-import Menu from "./Admin/Menu";
-import Produit from "./Admin/Produit";
-import Test from "./Admin/Test";
+// Site Client
+import Acceuil from "./Site_Client/Client/Acceuil";
+import Menu from "./Site_Client/ClientMenu/Menu";
+import Produit from "./Site_Client/Client/Produit";
+import Test from "./Site_Client/Client/Test";
+
+
+// Site Admin
+import Login from "./Site_Admin/Login/Login";
+
 
 import "./Styles/style.css";
 
-import { SearchProvider } from "./context/SearchContext";
+import { SearchProvider } from "./Site_Vitrine/Context/SearchContext";
 
 function App() {
   return (
@@ -33,7 +38,7 @@ function App() {
               path="/*"
               element={
                 <>
-                  <Navbar />
+                  <Vitrinemenu />
                    <SearchProvider>
                   <Background />
                   <main className="main-content">
@@ -50,13 +55,19 @@ function App() {
                 </>
               }
             />
-
-            {/* Routes Admin */}
-            <Route path="/admin/*" element={<Menu />}>
-              <Route index element={<Acceuil />} />
-              <Route path="produit" element={<Produit />} />
+            {/* Routes Client */}
+       
+         
+           <Route path="/client/*" element={<Menu />}>
+              <Route index element={< Acceuil/>} />
+              <Route path="produit" element={< Produit/>} />
               <Route path="test" element={<Test />} />
             </Route>
+          
+          <Route path="/login/*" >
+          <Route index element={<Login/>} />
+          </Route>
+
           </Routes>
         </Router>
       

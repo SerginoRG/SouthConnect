@@ -1,37 +1,49 @@
 /* src/Admin/Produit.css */
-
+/* ===== CONTAINER PRINCIPAL ===== */
 .produit-container {
+  width: 100%;
+  padding: 30px;
+}
+
+/* ===== EN-TÊTE AU-DESSUS DU TABLEAU ===== */
+.produit-header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  min-height: 10vh;
-  
-  
+  margin-bottom: 15px;
+}
+
+.produit-table-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #333;
 }
 
 .produit-card {
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
   width: 100%;
-  max-width: 600px;
-  padding: 40px;
-  animation: slideIn 0.5s ease-out;
+  max-width: 100%;
+  padding: 0;
+  animation: none;
 }
 
-.card-header {
+.produit-card-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
 }
 
-.card-header h2 {
+.produit-card-header h2 {
   color: #333;
   font-size: 2rem;
   margin-bottom: 10px;
   font-weight: 700;
 }
 
-.card-header p {
+.produit-card-header p {
   color: #666;
   font-size: 0.95rem;
 }
@@ -43,21 +55,21 @@
   gap: 20px;
 }
 
-.form-group {
+.produit-form-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.form-group label {
+.produit-form-group label {
   color: #333;
   font-weight: 600;
   font-size: 0.95rem;
 }
 
-.form-group input[type="text"],
-.form-group textarea,
-.form-group select {
+.produit-form-group input[type="text"],
+.produit-form-group textarea,
+.produit-form-group select {
   padding: 12px 15px;
   border: 2px solid #e0e0e0;
   border-radius: 10px;
@@ -67,33 +79,104 @@
   background: white;
 }
 
-.form-group input[type="text"]:focus,
-.form-group textarea:focus,
-.form-group select:focus {
+.produit-form-group input[type="text"]:focus,
+.produit-form-group textarea:focus,
+.produit-form-group select:focus {
   outline: none;
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-.form-group textarea {
+.produit-form-group textarea {
   resize: vertical;
   min-height: 100px;
 }
 
-.form-group select {
+.produit-form-group select {
   cursor: pointer;
 }
 
+/* ===== MODALE ===== */
+.produit-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.produit-modal-content {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: slideIn 0.3s ease-out;
+  margin: auto;
+}
+
+.produit-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 2rem;
+  color: #666;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.produit-close-btn:hover {
+  color: #ff4d4d;
+}
+
+/* ===== BOUTON AJOUTER ===== */
+.produit-add-btn {
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+}
+
+.produit-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* ===== TABLE ===== */
+.produit-table-container {
+  background: white;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
+}
+
 /* ===== UPLOAD D'IMAGE ===== */
-.file-input-wrapper {
+.produit-file-input-wrapper {
   position: relative;
 }
 
-.file-input {
+.produit-file-input {
   display: none;
 }
 
-.file-label {
+.produit-file-label {
   display: inline-block;
   padding: 12px 24px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -105,17 +188,59 @@
   text-align: center;
 }
 
-.file-label:hover {
+.produit-file-label:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
 }
 
-.file-label:active {
+.produit-file-label:active {
   transform: translateY(0);
 }
 
+.produit-actions-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Style de base pour les icônes */
+.produit-btn-icon {
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Icône Modifier (verte) */
+.produit-btn-icon.edit {
+  color: #16a34a;
+  background-color: rgba(22, 163, 74, 0.1);
+}
+
+.produit-btn-icon.edit:hover {
+  background-color: rgba(22, 163, 74, 0.2);
+  transform: scale(1.1);
+}
+
+/* Icône Supprimer (rouge) */
+.produit-btn-icon.delete {
+  color: #dc2626;
+  background-color: rgba(220, 38, 38, 0.1);
+}
+
+.produit-btn-icon.delete:hover {
+  background-color: rgba(220, 38, 38, 0.2);
+  transform: scale(1.1);
+}
+
 /* ===== APERÇU IMAGE ===== */
-.image-preview {
+.produit-image-preview {
   margin-top: 15px;
   border-radius: 10px;
   overflow: hidden;
@@ -123,15 +248,45 @@
   animation: fadeIn 0.3s ease;
 }
 
-.image-preview img {
+.produit-image-preview img {
   width: 100%;
   height: 200px;
   object-fit: cover;
   display: block;
 }
 
-/* ===== BOUTON SUBMIT ===== */
-.submit-btn {
+/* ===== BOUTONS SUBMIT ET ANNULER ===== */
+.produit-form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.produit-cancel-btn {
+  flex: 1;
+  padding: 15px 30px;
+  background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+}
+
+.produit-cancel-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(108, 117, 125, 0.4);
+}
+
+.produit-cancel-btn:active {
+  transform: translateY(-1px);
+}
+
+.produit-submit-btn {
+  flex: 1;
   padding: 15px 30px;
   background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
   color: white;
@@ -141,16 +296,15 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 10px;
   box-shadow: 0 5px 15px rgba(17, 153, 142, 0.3);
 }
 
-.submit-btn:hover {
+.produit-submit-btn:hover {
   transform: translateY(-3px);
   box-shadow: 0 10px 25px rgba(17, 153, 142, 0.4);
 }
 
-.submit-btn:active {
+.produit-submit-btn:active {
   transform: translateY(-1px);
 }
 
@@ -179,57 +333,70 @@
 @media (max-width: 768px) {
   .produit-container {
     padding: 15px;
-    align-items: flex-start;
-    min-height: auto;
   }
 
-  .produit-card {
-    padding: 25px;
-    margin-top: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  .produit-modal-content {
+    width: 95%;
+    padding: 20px;
+    max-height: 95vh;
   }
 
-  .card-header h2 {
-    font-size: 1.6rem;
+  .produit-card-header h2 {
+    font-size: 1.5rem;
   }
 
-  .card-header p {
-    font-size: 0.9rem;
-  }
-
-  .form-group input[type="text"],
-  .form-group textarea,
-  .form-group select {
+  .produit-form-group input[type="text"],
+  .produit-form-group textarea,
+  .produit-form-group select {
     padding: 10px 12px;
     font-size: 0.95rem;
   }
 
-  .submit-btn {
+  .produit-submit-btn {
     padding: 12px 24px;
     font-size: 1rem;
   }
 
-  .image-preview img {
+  .produit-image-preview img {
     height: 150px;
   }
 }
 
 @media (max-width: 480px) {
-  .produit-card {
-    padding: 20px;
+  .produit-modal-overlay {
+    padding: 10px;
   }
 
-  .card-header h2 {
-    font-size: 1.4rem;
+  .produit-modal-content {
+    padding: 15px;
   }
 
-  .file-label {
+  .produit-card-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .produit-close-btn {
+    font-size: 1.5rem;
+    top: 10px;
+    right: 15px;
+  }
+
+  .produit-file-label {
     width: 100%;
     padding: 10px 20px;
     font-size: 0.9rem;
   }
 
-  .submit-btn {
+  .produit-submit-btn {
+    width: 100%;
+  }
+
+  .produit-form-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .produit-cancel-btn {
     width: 100%;
   }
 }
