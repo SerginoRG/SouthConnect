@@ -1,7 +1,35 @@
-import React from 'react';
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "../../Styles/Login.css";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMsg(""); // réinitialiser le message d’erreur avant chaque tentative
+
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/api/admin/login", {
+        email,
+        password,
+      });
+
+      console.log("Admin connecté :", response.data.admin);
+      navigate("/admin/dashboard");
+    } catch (error) {
+      if (error.response && error.response.data.error) {
+        setErrorMsg(error.response.data.error); // message Laravel
+      } else {
+        setErrorMsg("Une erreur est survenue. Veuillez réessayer.");
+      }
+    }
+  };
+
   return (
     <div className="login-page">
       <div className="login-wrapper">
@@ -13,36 +41,43 @@ function Login() {
             style={{ borderRadius: "50%" }}
           />
         </div>
+
         <div className="login-container">
-          <h2>Connexion</h2>
-          <form id="loginForm">
+          <h2>Connexion Administrateur</h2>
+          <form onSubmit={handleSubmit}>
             <div className="login-input-group">
-              <label htmlFor="username">Nom d'utilisateur ou adresse Email</label>
-              <input 
-                type="text" 
-                id="username" 
-                placeholder="Entrer votre nom d'utilisateur ou adresse Email" 
-                required 
+              <label>Adresse Email</label>
+              <input
+                type="email"
+                placeholder="Entrer votre adresse Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
-              <p id="errorUsername" className="login-error-msg"></p>
             </div>
+
             <div className="login-input-group">
-              <label htmlFor="password">Mot de passe</label>
-              <input 
-                type="password" 
-                id="password" 
-                placeholder="Entrer votre mot de passe" 
-                required 
+              <label>Mot de passe</label>
+              <input
+                type="password"
+                placeholder="Entrer votre mot de passe"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
-              <p id="errorPassword" className="login-error-msg"></p>
             </div>
-            <button type="submit" className="login-submit-btn">Se connecter</button>
+
+            {/* Message d’erreur affiché sous le formulaire */}
+            {errorMsg && <p className="login-error-msg">{errorMsg}</p>}
+
+            <button type="submit" className="login-submit-btn">
+              Se connecter
+            </button>
           </form>
         </div>
       </div>
     </div>
   );
 }
-
 
 export default Login;

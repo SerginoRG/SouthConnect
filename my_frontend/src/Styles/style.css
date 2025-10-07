@@ -129,7 +129,9 @@
 
     /* Hero */
     .hero-section {
-      color: #f3ecec;
+ color: #FFFFFF; /* Or your preferred color */
+  /* Adds a slight black glow around the text to separate it from the background */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
       padding: 10rem 0;
       text-align: center;
       position: relative;

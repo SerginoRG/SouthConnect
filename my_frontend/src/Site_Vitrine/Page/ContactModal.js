@@ -41,7 +41,7 @@ function ContactModal() {
               <div className="mb-3">
                 <label className="form-label">Téléphone</label>
                 <PhoneInput
-                  country={"fr"} // par défaut France
+                  country={"mg"} // par défaut France
                   value={phone}
                   onChange={setPhone}
                   inputStyle={{ width: "100%" }}

@@ -1,16 +1,18 @@
-// src/Admin/Menu.js
+// src/Site_Client/ClientMenu/Menu.js
 import React, { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { FaBars, FaBox, FaVial } from "react-icons/fa";
+import { FaBars, FaBox, FaVial, FaHome } from "react-icons/fa"; // ✅ Ajout de FaHome
 import "../../Styles/Menu.css";
 
 function Menu() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
 
+  // ✅ Chemins corrigés
   const menuItems = [
-    { path: "/Client/Produit", label: "Produits", icon: <FaBox /> },
-    { path: "/Client/Test", label: "Test", icon: <FaVial /> }
+    { path: "/client/dashboard", label: "Accueil", icon: <FaHome /> },
+    { path: "/client/dashboard/produit", label: "Produits", icon: <FaBox /> },
+    { path: "/client/dashboard/test", label: "Test", icon: <FaVial /> },
   ];
 
   return (

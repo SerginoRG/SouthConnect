@@ -7,12 +7,16 @@ export default function Background() {
 
   const [bgIndex, setBgIndex] = useState(0);
 
-  const backgrounds = [
-    "https://media.istockphoto.com/id/2184718397/photo/interested-woman-chooses-clothes-to-buy-in-store-holds-hanger-with-dress-in-hands-looks-price.jpg?s=612x612&w=0&k=20&c=TeUBiBQv--r04mV2UOshvQBv79--u2bxv9LJM4zmDVk=",
-    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1600",
-    "https://images.unsplash.com/photo-1593062096033-9a26b09da705?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YnVyZWF1fGVufDB8fDB8fHww",
+   const backgrounds = [
+    "/images/FlashPubs/raiky_1.jpg",
+    "/images/FlashPubs/raiky_2.jpg",
+    "/images/FlashPubs/raiky_3.jpg",
+     "/images/FlashPubs/raiky_4.jpg",
+     "/images/FlashPubs/raiky_5.jpg",
+     "/images/FlashPubs/raiky_6.jpg",
   ];
 
+  
   useEffect(() => {
     const interval = setInterval(() => {
       setBgIndex((prevIndex) => (prevIndex + 1) % backgrounds.length);

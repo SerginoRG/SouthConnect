@@ -1,9 +1,10 @@
+// scr/Site_Client/Client/Produit.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import DataTable from "react-data-table-component";
 import "../../Styles/Produit.css";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 
 export default function Produit() {
   const [titre, setTitre] = useState("");
@@ -20,6 +21,8 @@ export default function Produit() {
   // ✅ Liste des produits
   const [produits, setProduits] = useState([]);
   const [pending, setPending] = useState(true);
+
+  const [searchTerm, setSearchTerm] = useState(""); // 🔍 champ de recherche
 
   // ✅ Charger tous les produits au montage
   useEffect(() => {
@@ -172,6 +175,16 @@ export default function Produit() {
     setShowModal(false);
   };
 
+  // 🔍 Filtrer les produits selon le terme de recherche
+  const filteredProduits = produits.filter((produit) => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      produit.title?.toLowerCase().includes(searchLower) ||
+      produit.description?.toLowerCase().includes(searchLower) ||
+      produit.categorie?.toLowerCase().includes(searchLower)
+    );
+  });
+
   // ✅ Colonnes du DataTable
   const columns = [
     {
@@ -234,12 +247,22 @@ export default function Produit() {
         </button>
       </div>
 
+      {/* 🔍 Barre de recherche */}
+      <div className="produit-search-bar">
+        <FaSearch className="search-icon" />
+        <input
+          type="text"
+          placeholder="Rechercher par titre, description ou catégorie..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
       {/* ✅ Tableau des produits */}
       <div className="produit-table-container">
         <DataTable
-          title="Liste des produits"
           columns={columns}
-          data={produits}
+          data={filteredProduits}
           progressPending={pending}
           pagination
           highlightOnHover
@@ -247,6 +270,7 @@ export default function Produit() {
           persistTableHead
           paginationPerPage={5}
           paginationRowsPerPageOptions={[5, 10, 20]}
+          noDataComponent="Aucun produit trouvé"
           customStyles={{
             headCells: {
               style: { backgroundColor: "#f3f4f6", fontWeight: "bold" },

@@ -400,3 +400,42 @@
     width: 100%;
   }
 }
+
+/* Conteneur de la barre de recherche */
+.produit-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  padding: 8px 12px;
+  border: 1px solid #ccc; /*  Bordure visible */
+  border-radius: 8px;
+  width: 300px;
+  margin-bottom: 20px;
+
+  /* Position à droite */
+  margin-left: auto;
+  justify-content: flex-start;
+}
+
+/* Icône de recherche */
+.produit-search-bar .search-icon {
+  color: #666;
+}
+
+/* Champ de texte */
+.produit-search-bar input {
+  border: none;
+  outline: none;
+  background: transparent;
+  flex: 1;
+  font-size: 15px;
+  color: #333;
+}
+
+/* Effet focus (quand l'utilisateur clique sur l'input) */
+.produit-search-bar:focus-within {
+  border-color: #007bff;
+  box-shadow: 0 0 3px rgba(0, 123, 255, 0.4);
+}
+
