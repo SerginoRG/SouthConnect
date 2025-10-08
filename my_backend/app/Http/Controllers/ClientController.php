@@ -170,6 +170,7 @@ class ClientController extends Controller
             return response()->json(['error' => 'Email ou mot de passe incorrect'], 401);
         }
 
+
         // ✅ Retourner les infos du client (plus tard tu pourras générer un token JWT)
         return response()->json([
             'message' => 'Connexion réussie',

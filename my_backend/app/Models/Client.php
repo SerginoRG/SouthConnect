@@ -26,4 +26,10 @@ class Client extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    // Relation : un client a plusieurs produits
+    public function produits()
+    {
+        return $this->hasMany(Produit::class, 'client_id', 'id_client');
+    }
 }

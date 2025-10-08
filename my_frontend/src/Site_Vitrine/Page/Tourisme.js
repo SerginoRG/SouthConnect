@@ -1,3 +1,4 @@
+// Tourisme.js
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import "../../Styles/Carde.css";
@@ -9,9 +10,10 @@ function Tourisme() {
 
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/api/produits/Tourisme")
+      .get("http://127.0.0.1:8000/api/produits/categorie/Tourisme")
       .then((response) => setProduits(response.data))
       .catch((error) => console.error("Erreur API:", error));
+
   }, []);
 
   const filteredProduits = produits.filter(

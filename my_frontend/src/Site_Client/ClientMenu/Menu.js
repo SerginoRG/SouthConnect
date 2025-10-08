@@ -1,14 +1,44 @@
 // src/Site_Client/ClientMenu/Menu.js
-import React, { useState } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
-import { FaBars, FaBox, FaVial, FaHome } from "react-icons/fa"; // ✅ Ajout de FaHome
+import React, { useState, useEffect } from "react";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { FaBars, FaBox, FaVial, FaHome, FaSignOutAlt } from "react-icons/fa";
+import Swal from "sweetalert2";
 import "../../Styles/Menu.css";
 
 function Menu() {
   const [open, setOpen] = useState(false);
+  const [clientEmail, setClientEmail] = useState("");
   const location = useLocation();
+  const navigate = useNavigate();
 
-  // ✅ Chemins corrigés
+  // 🔹 Récupérer le client depuis le localStorage
+  useEffect(() => {
+    const storedClient = localStorage.getItem("client");
+    if (storedClient) {
+      const parsedClient = JSON.parse(storedClient);
+      setClientEmail(parsedClient.email || "Client inconnu");
+    }
+  }, []);
+
+  // 🔹 Fonction de déconnexion avec confirmation
+  const handleLogout = () => {
+    Swal.fire({
+      title: "Voulez-vous vous déconnecter ?",
+      text: "Vous devrez vous reconnecter pour accéder à vos données.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Oui, déconnecter",
+      cancelButtonText: "Non, annuler",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("client"); // supprimer le client du stockage
+        
+        navigate("/client"); // rediriger vers la page de connexion
+      }
+    });
+  };
+
+  // ✅ Liens du menu
   const menuItems = [
     { path: "/client/dashboard", label: "Accueil", icon: <FaHome /> },
     { path: "/client/dashboard/produit", label: "Produits", icon: <FaBox /> },
@@ -46,6 +76,20 @@ function Menu() {
             ))}
           </ul>
         </nav>
+
+        {/* 🔹 Affichage email et bouton Déconnexion */}
+        <div className="sidebar-footer">
+          {open && (
+            <>
+              <div className="client-info">
+                <p>{clientEmail}</p>
+              </div>
+              <button className="logout-btn" onClick={handleLogout}>
+                <FaSignOutAlt className="logout-icon" /> Déconnexion
+              </button>
+            </>
+          )}
+        </div>
       </aside>
 
       {/* Overlay pour mobile */}

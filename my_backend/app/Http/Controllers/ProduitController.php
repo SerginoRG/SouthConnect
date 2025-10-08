@@ -4,57 +4,62 @@ namespace App\Http\Controllers;
 
 use App\Models\Produit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProduitController extends Controller
 {
     /**
-     * Ajouter un produit.
+     * 🔹 Lister les produits d’un client spécifique
      */
-    public function store(Request $request)
+    public function index(Request $request)
     {
-        // Validation simple
-        $request->validate([
+        $clientId = $request->query('client_id'); // on reçoit l’id du client en paramètre
+
+        if (!$clientId) {
+            return response()->json(['error' => 'Client ID manquant'], 400);
+        }
+
+        // On récupère uniquement les produits appartenant à ce client
+        $produits = Produit::where('client_id', $clientId)->get();
+
+        return response()->json($produits);
+    }
+
+    /**
+     * 🔹 Ajouter un produit
+     */
+public function store(Request $request)
+    {
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'categorie' => 'required|string|max:255',
-            'image_produit' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'categorie' => 'required|string',
+            'client_id' => 'required|integer',
+            'image_produit' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        // Gérer l'importation de l'image
         $imagePath = null;
         if ($request->hasFile('image_produit')) {
             $imagePath = $request->file('image_produit')->store('produits', 'public');
         }
 
-        // Création du produit
-        Produit::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'categorie' => $request->categorie,
+        $produit = Produit::create([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'categorie' => $validated['categorie'],
+            'client_id' => $validated['client_id'],
             'image_produit' => $imagePath,
         ]);
 
         return response()->json([
             'message' => 'Produit ajouté avec succès',
-        ], 201);
+            'produit' => $produit
+        ]);
     }
 
-
-     // Récupérer produits par catégorie
-    public function index($categorie)
-    {
-        $produits = Produit::where('categorie', $categorie)->get();
-        return response()->json($produits);
-    }
-
-    
-    // Récupérer tous les produits
-    public function all()
-    {
-        $produits = Produit::all();
-        return response()->json($produits);
-    }
-    // Modifier un produit
+    /**
+     * 🔹 Mettre à jour un produit
+     */
     public function update(Request $request, $id)
     {
         $produit = Produit::findOrFail($id);
@@ -66,10 +71,11 @@ class ProduitController extends Controller
             'image_produit' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Gérer l'image
         if ($request->hasFile('image_produit')) {
-            $imagePath = $request->file('image_produit')->store('produits', 'public');
-            $produit->image_produit = $imagePath;
+            if ($produit->image_produit) {
+                Storage::disk('public')->delete($produit->image_produit);
+            }
+            $produit->image_produit = $request->file('image_produit')->store('produits', 'public');
         }
 
         $produit->update([
@@ -81,16 +87,35 @@ class ProduitController extends Controller
         return response()->json(['message' => 'Produit modifié avec succès']);
     }
 
-    // Supprimer un produit
+    /**
+     * 🔹 Supprimer un produit
+     */
     public function destroy($id)
     {
         $produit = Produit::findOrFail($id);
+
+        if ($produit->image_produit) {
+            Storage::disk('public')->delete($produit->image_produit);
+        }
+
         $produit->delete();
 
         return response()->json(['message' => 'Produit supprimé avec succès']);
     }
 
 
+    // Récupérer produits par catégorie
+   public function indexByCategorie($categorie)
+    {
+        // Récupérer uniquement les produits dont le client est actif
+        $produits = Produit::where('categorie', $categorie)
+            ->whereHas('client', function ($query) {
+                $query->where('statut', true); // seulement les clients actifs
+            })
+            ->get();
+
+        return response()->json($produits);
+    }
 
 
 }

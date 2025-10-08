@@ -218,3 +218,41 @@
 .sidebar::-webkit-scrollbar-thumb:hover {
   background: rgba(78, 204, 163, 0.7);
 }
+
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 1rem;
+  border-top: 1px solid #ccc;
+  text-align: center;
+}
+
+.client-info p {
+  font-size: 0.9rem;
+  color: white;
+  margin-bottom: 10px;
+  word-break: break-all;
+}
+
+.logout-btn {
+  background-color: #e63946;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.logout-btn:hover {
+  background-color: #c92a36;
+}
+
+.logout-icon {
+  font-size: 16px;
+}

@@ -15,5 +15,12 @@ class Produit extends Model
         'description',
         'categorie',
         'image_produit',
+        'client_id', //  ajout obligatoire
     ];
+
+    // Relation : un produit appartient à un client
+    public function client()
+    {
+        return $this->belongsTo(Client::class, 'client_id', 'id_client');
+    }
 }

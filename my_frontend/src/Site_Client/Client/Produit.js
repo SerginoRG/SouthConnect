@@ -1,4 +1,3 @@
-// scr/Site_Client/Client/Produit.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -9,361 +8,300 @@ import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 export default function Produit() {
   const [titre, setTitre] = useState("");
   const [description, setDescription] = useState("");
+  const [categorie, setCategorie] = useState("");
   const [image, setImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
-  const [categorie, setCategorie] = useState("Tourisme");
-  const [showModal, setShowModal] = useState(false);
-
-  // ✅ États pour la modification
-  const [editMode, setEditMode] = useState(false);
-  const [editId, setEditId] = useState(null);
-
-  // ✅ Liste des produits
   const [produits, setProduits] = useState([]);
-  const [pending, setPending] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const [searchTerm, setSearchTerm] = useState(""); // 🔍 champ de recherche
+  const client = JSON.parse(localStorage.getItem("client"));
+  const clientId = client ? client.id_client : null;
+  const clientStatut = client ? client.statut : false; // statut du compte
 
-  // ✅ Charger tous les produits au montage
   useEffect(() => {
     fetchProduits();
   }, []);
 
   const fetchProduits = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/produits");
+      if (!clientId) return;
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/produits?client_id=${clientId}`
+      );
       setProduits(response.data);
     } catch (error) {
       console.error("Erreur lors du chargement :", error);
-      Swal.fire({
-        icon: "error",
-        title: "Erreur",
-        text: "Impossible de charger les produits.",
-      });
-    } finally {
-      setPending(false);
     }
   };
 
-  // ✅ Gestion de l'image
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => setImagePreview(reader.result);
-      reader.readAsDataURL(file);
-    }
+  const resetForm = () => {
+    setTitre("");
+    setDescription("");
+    setCategorie("");
+    setImage(null);
+    setEditingId(null);
   };
 
-  // ✅ Ajouter un produit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!client) {
+      Swal.fire("Erreur", "Veuillez vous reconnecter.", "error");
+      return;
+    }
+
+    if (!clientStatut) {
+      Swal.fire("Attention", "Vous devez vous abonner pour effectuer cette action", "warning");
+      return;
+    }
+
     try {
       const formData = new FormData();
       formData.append("title", titre);
       formData.append("description", description);
       formData.append("categorie", categorie);
+      formData.append("client_id", client.id_client);
       if (image) formData.append("image_produit", image);
 
-      const response = await axios.post("http://127.0.0.1:8000/api/produits", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      let response;
+      if (editingId) {
+        response = await axios.post(
+          `http://127.0.0.1:8000/api/produits/${editingId}?_method=PUT`,
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+      } else {
+        response = await axios.post(
+          "http://127.0.0.1:8000/api/produits",
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+      }
 
       Swal.fire({
         icon: "success",
         title: "Succès",
         text: response.data.message,
-        showConfirmButton: false,
         timer: 2000,
+        showConfirmButton: false,
       });
 
       resetForm();
+      setModalOpen(false);
       fetchProduits();
     } catch (error) {
       console.error(error);
-      Swal.fire({
-        icon: "error",
-        title: "Erreur",
-        text: "Échec de l'ajout du produit. Vérifiez vos données.",
-      });
+      Swal.fire("Erreur", "Impossible d'enregistrer le produit.", "error");
     }
   };
 
-  // ✅ Pré-remplir les champs pour modification
-  const handleEdit = (produit) => {
-    setEditMode(true);
-    setEditId(produit.id);
-    setTitre(produit.title);
-    setDescription(produit.description);
-    setCategorie(produit.categorie);
-    setImagePreview(produit.image_produit ? `http://127.0.0.1:8000/storage/${produit.image_produit}` : null);
-    setShowModal(true);
-  };
-
-  // ✅ Mettre à jour un produit
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    try {
-      const formData = new FormData();
-      formData.append("title", titre);
-      formData.append("description", description);
-      formData.append("categorie", categorie);
-      if (image) formData.append("image_produit", image);
-
-      const response = await axios.post(
-        `http://127.0.0.1:8000/api/produits/${editId}?_method=PUT`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-
-      Swal.fire({
-        icon: "success",
-        title: "Succès",
-        text: response.data.message,
-        timer: 2000,
-        showConfirmButton: false,
-      });
-
-      resetForm();
-      fetchProduits();
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Erreur",
-        text: "Échec de la modification du produit.",
-      });
-    }
-  };
-
-  // ✅ Supprimer un produit avec confirmation SweetAlert
   const handleDelete = async (id) => {
+    if (!clientStatut) {
+      Swal.fire("Attention", "Vous devez vous abonner pour effectuer cette action", "warning");
+      return;
+    }
+
     Swal.fire({
-      title: "Êtes-vous sûr ?",
-      text: "Cette action est irréversible !",
+      title: "Supprimer ce produit ?",
+      text: "Cette action est irréversible.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
       confirmButtonText: "Oui, supprimer",
       cancelButtonText: "Annuler",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           await axios.delete(`http://127.0.0.1:8000/api/produits/${id}`);
-          Swal.fire("Supprimé !", "Le produit a été supprimé.", "success");
+          Swal.fire("Supprimé", "Le produit a été supprimé.", "success");
           fetchProduits();
         } catch (error) {
-          Swal.fire("Erreur", "Impossible de supprimer le produit.", "error");
+          Swal.fire("Erreur", "Suppression échouée.", "error");
         }
       }
     });
   };
 
-  // ✅ Réinitialiser le formulaire
-  const resetForm = () => {
-    setTitre("");
-    setDescription("");
-    setImage(null);
-    setImagePreview(null);
-    setCategorie("Tourisme");
-    setEditMode(false);
-    setEditId(null);
-    setShowModal(false);
+  const handleEdit = (produit) => {
+    if (!clientStatut) {
+      Swal.fire("Attention", "Vous devez vous abonner pour effectuer cette action", "warning");
+      return;
+    }
+
+    setTitre(produit.title);
+    setDescription(produit.description);
+    setCategorie(produit.categorie);
+    setEditingId(produit.id);
+    setModalOpen(true);
   };
 
-  // 🔍 Filtrer les produits selon le terme de recherche
-  const filteredProduits = produits.filter((produit) => {
-    const searchLower = searchTerm.toLowerCase();
-    return (
-      produit.title?.toLowerCase().includes(searchLower) ||
-      produit.description?.toLowerCase().includes(searchLower) ||
-      produit.categorie?.toLowerCase().includes(searchLower)
-    );
-  });
+  const handleAdd = () => {
+    if (!clientStatut) {
+      Swal.fire("Attention", "Vous devez vous abonner pour effectuer cette action", "warning");
+      return;
+    }
+    resetForm();
+    setModalOpen(true);
+  };
 
-  // ✅ Colonnes du DataTable
   const columns = [
+    { name: "Titre", selector: (row) => row.title, sortable: true },
+    { name: "Description", selector: (row) => row.description },
+    { name: "Catégorie", selector: (row) => row.categorie },
     {
       name: "Image",
-      selector: (row) => row.image_produit,
       cell: (row) =>
         row.image_produit ? (
           <img
             src={`http://127.0.0.1:8000/storage/${row.image_produit}`}
             alt={row.title}
-            width="80"
-            height="60"
-            style={{ objectFit: "cover", borderRadius: "8px" }}
+            width="70"
+            height="70"
           />
         ) : (
-          <span>Pas d'image</span>
+          "Aucune"
         ),
     },
-    { name: "Titre", selector: (row) => row.title, sortable: true },
-    { name: "Description", selector: (row) => row.description, wrap: true },
-    { name: "Catégorie", selector: (row) => row.categorie, sortable: true },
     {
       name: "Actions",
       cell: (row) => (
-        <div className="produit-actions-buttons">
+        <>
           <button
             className="produit-btn-icon edit"
             onClick={() => handleEdit(row)}
-            title="Modifier le produit"
+            disabled={!clientStatut}
+            style={{ opacity: clientStatut ? 1 : 0.5, cursor: clientStatut ? "pointer" : "not-allowed" }}
           >
-            <FaEdit size={18} />
+            <FaEdit />
           </button>
           <button
             className="produit-btn-icon delete"
             onClick={() => handleDelete(row.id)}
-            title="Supprimer le produit"
+            disabled={!clientStatut}
+            style={{ opacity: clientStatut ? 1 : 0.5, cursor: clientStatut ? "pointer" : "not-allowed" }}
           >
-            <FaTrash size={18} />
+            <FaTrash />
           </button>
-        </div>
+        </>
       ),
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
-    }
+    },
   ];
+
+  const filteredProduits = produits.filter((p) =>
+    p.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="produit-container">
+      <h2 className="titre-page">Gestion des Produits</h2>
+
+      {!clientStatut && (
+        <div style={{ color: "red", marginBottom: "10px" }}>
+          ⚠️ Vous devez vous abonner.
+        </div>
+      )}
+
       <div className="produit-header">
-        <h2 className="produit-table-title">Liste des produits</h2>
         <button
           className="produit-add-btn"
-          onClick={() => {
-            resetForm();
-            setShowModal(true);
-          }}
+          onClick={handleAdd}
+          disabled={!clientStatut}
+          style={{ opacity: clientStatut ? 1 : 0.5, cursor: clientStatut ? "pointer" : "not-allowed" }}
         >
-          ➕ Ajouter un produit
+          Ajouter un produit
         </button>
+        <div className="produit-search-bar">
+          <FaSearch className="search-icon" />
+          <input
+            type="text"
+            placeholder="Rechercher un produit..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
       </div>
 
-      {/* 🔍 Barre de recherche */}
-      <div className="produit-search-bar">
-        <FaSearch className="search-icon" />
-        <input
-          type="text"
-          placeholder="Rechercher par titre, description ou catégorie..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-
-      {/* ✅ Tableau des produits */}
       <div className="produit-table-container">
         <DataTable
           columns={columns}
           data={filteredProduits}
-          progressPending={pending}
           pagination
           highlightOnHover
-          responsive
-          persistTableHead
-          paginationPerPage={5}
-          paginationRowsPerPageOptions={[5, 10, 20]}
-          noDataComponent="Aucun produit trouvé"
-          customStyles={{
-            headCells: {
-              style: { backgroundColor: "#f3f4f6", fontWeight: "bold" },
-            },
-          }}
+          striped
+          noDataComponent="Aucun produit trouvé."
         />
       </div>
 
-      {/* ✅ Modale d'ajout / modification */}
-      {showModal && (
-        <div className="produit-modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="produit-modal-content" onClick={(e) => e.stopPropagation()}>
-            <span className="produit-close-btn" onClick={() => setShowModal(false)}>
+      {/* Modale */}
+      {modalOpen && clientStatut && (
+        <div className="produit-modal-overlay">
+          <div className="produit-modal-content">
+            <span className="produit-close-btn" onClick={() => setModalOpen(false)}>
               &times;
             </span>
+            <h2>{editingId ? "Modifier un produit" : "Ajouter un produit"}</h2>
 
-            <div className="produit-card">
-              <div className="produit-card-header">
-                <h2>{editMode ? "Modifier le produit" : "Ajouter un produit"}</h2>
-              </div>
-
-              <form onSubmit={editMode ? handleUpdate : handleSubmit} className="produit-form">
-                <div className="produit-form-group">
-                  <label htmlFor="titre">Titre</label>
-                  <input
-                    id="titre"
-                    type="text"
-                    value={titre}
-                    onChange={(e) => setTitre(e.target.value)}
-                    placeholder="Entrez le titre du produit"
-                    required
-                  />
-                </div>
-
-                <div className="produit-form-group">
-                  <label htmlFor="description">Description</label>
-                  <textarea
-                    id="description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Décrivez votre produit..."
-                    required
-                    rows="4"
-                  />
-                </div>
-
-                <div className="produit-form-group">
-                  <label htmlFor="categorie">Catégorie</label>
-                  <select
-                    id="categorie"
-                    value={categorie}
-                    onChange={(e) => setCategorie(e.target.value)}
-                  >
-                    <option value="Tourisme">Tourisme</option>
-                    <option value="Boutique">Boutique</option>
-                  </select>
-                </div>
-
-                <div className="produit-form-group">
-                  <label htmlFor="image">Image du produit</label>
-                  <div className="produit-file-input-wrapper">
-                    <input
-                      id="image"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="produit-file-input"
-                    />
-                    <label htmlFor="image" className="produit-file-label">
-                      {image ? "Changer l'image" : "Choisir une image"}
-                    </label>
-                    {imagePreview && (
-                      <div className="produit-image-preview">
-                        <img src={imagePreview} alt="Aperçu" />
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="produit-form-actions">
-                  <button 
-                    type="button" 
-                    className="produit-cancel-btn"
-                    onClick={resetForm}
-                  >
-                    Annuler
-                  </button>
-                  <button type="submit" className="produit-submit-btn">
-                    {editMode ? "Modifier le produit" : "Ajouter le produit"}
-                  </button>
-                </div>
-              </form>
+          <form onSubmit={handleSubmit} className="produit-form">
+            <div className="produit-form-group">
+              <input
+                type="text"
+                placeholder="Titre du produit"
+                value={titre}
+                onChange={(e) => setTitre(e.target.value)}
+                required
+              />
             </div>
+
+            <div className="produit-form-group">
+              <textarea
+                placeholder="Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="produit-form-group">
+              <select
+                value={categorie}
+                onChange={(e) => setCategorie(e.target.value)}
+                required
+              >
+                <option value="">-- Sélectionner une catégorie --</option>
+                <option value="Tourisme">Tourisme</option>
+                <option value="Restauration">Restauration</option>
+                <option value="Boutique">Boutique</option>
+                <option value="Hôtel">Hôtel</option>
+              </select>
+            </div>
+
+            <div className="produit-form-group produit-file-input-wrapper">
+              <input
+                type="file"
+                accept="image/*"
+                className="produit-file-input"
+                id="file-upload"
+                onChange={(e) => setImage(e.target.files[0])}
+              />
+              <label htmlFor="file-upload" className="produit-file-label">
+                Choisir une image
+              </label>
+            </div>
+
+            <div className="produit-form-actions">
+              <button
+                type="button"
+                className="produit-cancel-btn"
+                onClick={() => setModalOpen(false)}
+              >
+                Annuler
+              </button>
+              <button type="submit" className="produit-submit-btn">
+                {editingId ? "Modifier" : "Ajouter"}
+              </button>
+            </div>
+          </form>
+
           </div>
         </div>
       )}

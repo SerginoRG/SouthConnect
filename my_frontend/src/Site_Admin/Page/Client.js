@@ -233,13 +233,9 @@ export default function Client() {
 
       {/* Modal Ajouter Client */}
       {showAddModal && (
-        <div
-          className="produit-modal-overlay"
-          onClick={() => setShowAddModal(false)}
+        <div className="produit-modal-overlay" onClick={() => setShowAddModal(false)}
         >
-          <div
-            className="produit-modal-content"
-            onClick={(e) => e.stopPropagation()}
+          <div className="produit-modal-content" onClick={(e) => e.stopPropagation()}
           >
             <span
               className="produit-close-btn"

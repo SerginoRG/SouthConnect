@@ -12,12 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('produits', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_produit'); // clé primaire
             $table->string('title');
             $table->text('description');
             $table->string('categorie');
             $table->string('image_produit')->nullable();
-            // pas de timestamps
+            $table->unsignedBigInteger('client_id'); // clé étrangère vers clients
+
+            // Définition de la contrainte de clé étrangère
+            $table->foreign('client_id')
+                  ->references('id_client')
+                  ->on('clients')
+                  ->onDelete('cascade'); // si le client est supprimé, les produits le sont aussi
         });
     }
 

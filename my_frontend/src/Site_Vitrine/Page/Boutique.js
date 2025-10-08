@@ -1,3 +1,4 @@
+// Boutique.js
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import "../../Styles/Carde.css";
@@ -8,10 +9,11 @@ function Boutique() {
   const [produits, setProduits] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/api/produits/Boutique")
+      axios
+      .get("http://127.0.0.1:8000/api/produits/categorie/Boutique")
       .then((response) => setProduits(response.data))
       .catch((error) => console.error(error));
+
   }, []);
 
   const filteredProduits = produits.filter(
