@@ -1,12 +1,21 @@
-// Tourisme.js
+// // src/Site_Vitrine/Page/Tourisme.js
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import "../../Styles/Carde.css";
 import { SearchContext } from "../Context/SearchContext";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2"; // ✅ Ajouté
+
 
 function Tourisme() {
   const { searchTerm } = useContext(SearchContext);
   const [produits, setProduits] = useState([]);
+  const navigate = useNavigate(); //  initialisation navigation
+  // Récupération du client connecté
+  const client = JSON.parse(localStorage.getItem("client"));
+  const clientId = client ? client.id_client : null;
+
+
 
   useEffect(() => {
     axios
@@ -22,6 +31,14 @@ function Tourisme() {
       item.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+ const handleEnSavoirPlus = (produitId) => {
+   if (!clientId) {
+     Swal.fire("Erreur", "Veuillez vous connecter.", "error");
+     return;
+   }
+   navigate(`/espace/${clientId}/${produitId}`);
+ };
+ 
   return (
     <section className="content-section py-5">
       <div className="container">
@@ -39,9 +56,12 @@ function Tourisme() {
                 <div className="card-content">
                   <h3 className="card-title">{item.title}</h3>
                   <p className="card-text">{item.description}</p>
-                  <a href="https://example.com" className="card-button">
+                   <button
+                    className="card-button"
+                    onClick={() => handleEnSavoirPlus(item.id_produit)}
+                  >
                     En savoir plus
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>

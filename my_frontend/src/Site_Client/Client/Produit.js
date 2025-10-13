@@ -1,3 +1,4 @@
+// src/Site_Client/Client/Produit.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -17,18 +18,16 @@ export default function Produit() {
 
   const client = JSON.parse(localStorage.getItem("client"));
   const clientId = client ? client.id_client : null;
-  const clientStatut = client ? client.statut : false; // statut du compte
+  const clientStatut = client ? client.statut : false;
 
   useEffect(() => {
     fetchProduits();
   }, []);
 
   const fetchProduits = async () => {
+    if (!clientId) return;
     try {
-      if (!clientId) return;
-      const response = await axios.get(
-        `http://127.0.0.1:8000/api/produits?client_id=${clientId}`
-      );
+      const response = await axios.get(`http://127.0.0.1:8000/api/produits?client_id=${clientId}`);
       setProduits(response.data);
     } catch (error) {
       console.error("Erreur lors du chargement :", error);
@@ -45,12 +44,10 @@ export default function Produit() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!client) {
       Swal.fire("Erreur", "Veuillez vous reconnecter.", "error");
       return;
     }
-
     if (!clientStatut) {
       Swal.fire("Attention", "Vous devez vous abonner pour effectuer cette action", "warning");
       return;
@@ -66,6 +63,7 @@ export default function Produit() {
 
       let response;
       if (editingId) {
+        // Utiliser PUT via POST avec _method
         response = await axios.post(
           `http://127.0.0.1:8000/api/produits/${editingId}?_method=PUT`,
           formData,
@@ -96,7 +94,7 @@ export default function Produit() {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id_produit) => {
     if (!clientStatut) {
       Swal.fire("Attention", "Vous devez vous abonner pour effectuer cette action", "warning");
       return;
@@ -112,7 +110,7 @@ export default function Produit() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`http://127.0.0.1:8000/api/produits/${id}`);
+          await axios.delete(`http://127.0.0.1:8000/api/produits/${id_produit}`);
           Swal.fire("Supprimé", "Le produit a été supprimé.", "success");
           fetchProduits();
         } catch (error) {
@@ -127,11 +125,10 @@ export default function Produit() {
       Swal.fire("Attention", "Vous devez vous abonner pour effectuer cette action", "warning");
       return;
     }
-
     setTitre(produit.title);
     setDescription(produit.description);
     setCategorie(produit.categorie);
-    setEditingId(produit.id);
+    setEditingId(produit.id_produit); // ✅ utiliser id_produit
     setModalOpen(true);
   };
 
@@ -176,7 +173,7 @@ export default function Produit() {
           </button>
           <button
             className="produit-btn-icon delete"
-            onClick={() => handleDelete(row.id)}
+            onClick={() => handleDelete(row.id_produit)} // ✅ utiliser id_produit
             disabled={!clientStatut}
             style={{ opacity: clientStatut ? 1 : 0.5, cursor: clientStatut ? "pointer" : "not-allowed" }}
           >
@@ -241,66 +238,64 @@ export default function Produit() {
             </span>
             <h2>{editingId ? "Modifier un produit" : "Ajouter un produit"}</h2>
 
-          <form onSubmit={handleSubmit} className="produit-form">
-            <div className="produit-form-group">
-              <input
-                type="text"
-                placeholder="Titre du produit"
-                value={titre}
-                onChange={(e) => setTitre(e.target.value)}
-                required
-              />
-            </div>
+            <form onSubmit={handleSubmit} className="produit-form">
+              <div className="produit-form-group">
+                <input
+                  type="text"
+                  placeholder="Titre du produit"
+                  value={titre}
+                  onChange={(e) => setTitre(e.target.value)}
+                  required
+                />
+              </div>
 
-            <div className="produit-form-group">
-              <textarea
-                placeholder="Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                required
-              />
-            </div>
+              <div className="produit-form-group">
+                <textarea
+                  placeholder="Description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  required
+                />
+              </div>
 
-            <div className="produit-form-group">
-              <select
-                value={categorie}
-                onChange={(e) => setCategorie(e.target.value)}
-                required
-              >
-                <option value="">-- Sélectionner une catégorie --</option>
-                <option value="Tourisme">Tourisme</option>
-                <option value="Restauration">Restauration</option>
-                <option value="Boutique">Boutique</option>
-                <option value="Hôtel">Hôtel</option>
-              </select>
-            </div>
+              <div className="produit-form-group">
+                <select
+                  value={categorie}
+                  onChange={(e) => setCategorie(e.target.value)}
+                  required
+                >
+                  <option value="">-- Sélectionner une catégorie --</option>
+                  <option value="Tourisme">Tourisme</option>
+                  <option value="Boutique">Boutique</option>
+                </select>
+              </div>
 
-            <div className="produit-form-group produit-file-input-wrapper">
-              <input
-                type="file"
-                accept="image/*"
-                className="produit-file-input"
-                id="file-upload"
-                onChange={(e) => setImage(e.target.files[0])}
-              />
-              <label htmlFor="file-upload" className="produit-file-label">
-                Choisir une image
-              </label>
-            </div>
+              <div className="produit-form-group produit-file-input-wrapper">
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="produit-file-input"
+                  id="file-upload"
+                  onChange={(e) => setImage(e.target.files[0])}
+                />
+                <label htmlFor="file-upload" className="produit-file-label">
+                  Choisir une image
+                </label>
+              </div>
 
-            <div className="produit-form-actions">
-              <button
-                type="button"
-                className="produit-cancel-btn"
-                onClick={() => setModalOpen(false)}
-              >
-                Annuler
-              </button>
-              <button type="submit" className="produit-submit-btn">
-                {editingId ? "Modifier" : "Ajouter"}
-              </button>
-            </div>
-          </form>
+              <div className="produit-form-actions">
+                <button
+                  type="button"
+                  className="produit-cancel-btn"
+                  onClick={() => setModalOpen(false)}
+                >
+                  Annuler
+                </button>
+                <button type="submit" className="produit-submit-btn">
+                  {editingId ? "Modifier" : "Ajouter"} {/* ✅ bouton dynamique */}
+                </button>
+              </div>
+            </form>
 
           </div>
         </div>

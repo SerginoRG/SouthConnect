@@ -3,24 +3,40 @@ import React, { useState, useEffect } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { FaBars, FaBox, FaVial, FaHome, FaSignOutAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
+import axios from "axios";
 import "../../Styles/Menu.css";
 
 function Menu() {
   const [open, setOpen] = useState(false);
   const [clientEmail, setClientEmail] = useState("");
+  const [clientId, setClientId] = useState(null);
+  const [produits, setProduits] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
 
-  // 🔹 Récupérer le client depuis le localStorage
   useEffect(() => {
     const storedClient = localStorage.getItem("client");
     if (storedClient) {
       const parsedClient = JSON.parse(storedClient);
       setClientEmail(parsedClient.email || "Client inconnu");
+      setClientId(parsedClient.id_client);
     }
   }, []);
 
-  // 🔹 Fonction de déconnexion avec confirmation
+  // 🔹 Charger les produits pour ce client
+  useEffect(() => {
+    if (clientId) {
+      axios
+        .get(`http://127.0.0.1:8000/api/produits/liste?client_id=${clientId}`)
+        .then((res) => {
+          setProduits(res.data);
+        })
+        .catch((err) => {
+          console.error("Erreur lors du chargement des produits", err);
+        });
+    }
+  }, [clientId]);
+
   const handleLogout = () => {
     Swal.fire({
       title: "Voulez-vous vous déconnecter ?",
@@ -31,14 +47,12 @@ function Menu() {
       cancelButtonText: "Non, annuler",
     }).then((result) => {
       if (result.isConfirmed) {
-        localStorage.removeItem("client"); // supprimer le client du stockage
-        
-        navigate("/client"); // rediriger vers la page de connexion
+        localStorage.removeItem("client");
+        navigate("/client");
       }
     });
   };
 
-  // ✅ Liens du menu
   const menuItems = [
     { path: "/client/dashboard", label: "Accueil", icon: <FaHome /> },
     { path: "/client/dashboard/produit", label: "Produits", icon: <FaBox /> },
@@ -47,17 +61,13 @@ function Menu() {
 
   return (
     <div className="admin-container">
-      {/* Sidebar */}
       <aside className={`sidebar ${open ? "open" : "closed"}`}>
-        {/* Bouton Hamburger */}
         <div className="hamburger" onClick={() => setOpen(!open)}>
           <FaBars size={24} />
         </div>
 
-        {/* Logo ou titre */}
         {open && <div className="sidebar-header">SouthConnect</div>}
 
-        {/* Liens du menu */}
         <nav className="menu-nav">
           <ul>
             {menuItems.map((item) => (
@@ -74,10 +84,35 @@ function Menu() {
                 </Link>
               </li>
             ))}
+
+            {/* 🔹 Sous-menu Carousel avec produits */}
+            <li>
+              <div className="menu-link">
+                <span className="menu-icon">
+                  <FaVial />
+                </span>
+                {open && <span className="menu-label">Carousel</span>}
+              </div>
+              {open && (
+                <ul className="submenu">
+                  {produits.length > 0 ? (
+                    produits.map((produit) => (
+                      <li key={produit.id_produit}>
+                        <Link to={`/client/dashboard/carrouselclient/${produit.id_produit}`}>
+                          {produit.title}
+                        </Link>
+
+                      </li>
+                    ))
+                  ) : (
+                    <li>Aucun produit</li>
+                  )}
+                </ul>
+              )}
+            </li>
           </ul>
         </nav>
 
-        {/* 🔹 Affichage email et bouton Déconnexion */}
         <div className="sidebar-footer">
           {open && (
             <>
@@ -92,10 +127,8 @@ function Menu() {
         </div>
       </aside>
 
-      {/* Overlay pour mobile */}
       {open && <div className="overlay" onClick={() => setOpen(false)} />}
 
-      {/* Contenu principal */}
       <main className={`main-content ${open ? "shifted" : ""}`}>
         <Outlet />
       </main>

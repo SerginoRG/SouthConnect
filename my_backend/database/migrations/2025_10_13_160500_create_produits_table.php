@@ -17,13 +17,16 @@ return new class extends Migration
             $table->text('description');
             $table->string('categorie');
             $table->string('image_produit')->nullable();
-            $table->unsignedBigInteger('client_id'); // clé étrangère vers clients
+            
+            // 🔹 Clé étrangère vers la table clients
+            $table->unsignedBigInteger('client_id');
 
-            // Définition de la contrainte de clé étrangère
             $table->foreign('client_id')
                   ->references('id_client')
                   ->on('clients')
-                  ->onDelete('cascade'); // si le client est supprimé, les produits le sont aussi
+                  ->onDelete('cascade');
+
+           
         });
     }
 

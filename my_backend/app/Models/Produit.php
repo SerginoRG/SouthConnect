@@ -6,21 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Produit extends Model
 {
-    protected $table = 'produits'; // nom de la table
-
-    public $timestamps = false; // car on a annulé les timestamps
+    protected $table = 'produits';
+    protected $primaryKey = 'id_produit';
+    public $timestamps = false;
 
     protected $fillable = [
         'title',
         'description',
         'categorie',
         'image_produit',
-        'client_id', //  ajout obligatoire
+        'client_id',
     ];
 
-    // Relation : un produit appartient à un client
     public function client()
     {
         return $this->belongsTo(Client::class, 'client_id', 'id_client');
     }
 }
+

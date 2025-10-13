@@ -8,7 +8,7 @@ import Vitrinemenu from "./Site_Vitrine/NavBar/Vitrinemenu";
 import Footer from "./Site_Vitrine/NavBar/Footer";
 import Publication from "./Site_Vitrine/Page/Publication";
 import Boutique from "./Site_Vitrine/Page/Boutique";
-import ContactModal from "./Site_Vitrine/Page/ContactModal";
+import EspaceClient from "./Site_Vitrine/Page/EspaceClient";
 import Background from "./Site_Vitrine/Components/Background";
 import { SearchProvider } from "./Site_Vitrine/Context/SearchContext";
 
@@ -18,6 +18,7 @@ import Acceuil from "./Site_Client/Client/Acceuil";
 import Menu from "./Site_Client/ClientMenu/Menu";
 import Produit from "./Site_Client/Client/Produit";
 import Test from "./Site_Client/Client/Test";
+import CarrouselClient from "./Site_Client/Client/Carousel";
 
 // Site Admin
 import Login from "./Site_Admin/Login/Login";
@@ -26,7 +27,9 @@ import AcceuilAdmin from "./Site_Admin/Page/Acceuil";
 import Client from "./Site_Admin/Page/Client";
 import FlashPubs from "./Site_Admin/Page/FlashPubs";
 
+
 import "./Styles/style.css";
+
 
 function App() {
   return (
@@ -47,9 +50,10 @@ function App() {
                       <Route path="/secteur/tourisme" element={<Tourisme />} />
                       <Route path="/secteur/boutique" element={<Boutique />} />
                       <Route path="/publication" element={<Publication />} />
+                      
                     </Routes>
                   </main>
-                  <ContactModal />
+                 
                 </SearchProvider>
                 <Footer />
               </>
@@ -57,6 +61,8 @@ function App() {
           />
 
   
+<Route path="/espace/:clientId/:produitId" element={<EspaceClient />} />
+
 
          {/* ---------- SITE CLIENT ---------- */}
           <Route path="/client" element={<LoginClient />} />
@@ -65,6 +71,8 @@ function App() {
             <Route index element={<Acceuil />} />  
             <Route path="produit" element={<Produit />} /> 
             <Route path="test" element={<Test />} />    
+           <Route path="carrouselclient/:id_produit" element={<CarrouselClient />} />
+  
           </Route>
 
 

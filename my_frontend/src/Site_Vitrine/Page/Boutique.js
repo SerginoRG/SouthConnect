@@ -1,19 +1,25 @@
-// Boutique.js
+// src/Site_Vitrine/Page/Boutique.js
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import "../../Styles/Carde.css";
 import { SearchContext } from "../Context/SearchContext";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function Boutique() {
-  const { searchTerm } = useContext(SearchContext); // 📌 recherche globale
+  const { searchTerm } = useContext(SearchContext);
   const [produits, setProduits] = useState([]);
+  const navigate = useNavigate();
+
+  // Récupération du client connecté
+  const client = JSON.parse(localStorage.getItem("client"));
+  const clientId = client ? client.id_client : null;
 
   useEffect(() => {
-      axios
+    axios
       .get("http://127.0.0.1:8000/api/produits/categorie/Boutique")
       .then((response) => setProduits(response.data))
       .catch((error) => console.error(error));
-
   }, []);
 
   const filteredProduits = produits.filter(
@@ -21,6 +27,15 @@ function Boutique() {
       item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Redirection vers la page espace avec clientId et produitId
+const handleEnSavoirPlus = (produitId) => {
+  if (!clientId) {
+    Swal.fire("Erreur", "Veuillez vous connecter.", "error");
+    return;
+  }
+  navigate(`/espace/${clientId}/${produitId}`);
+};
 
   return (
     <section className="content-section py-5">
@@ -39,9 +54,12 @@ function Boutique() {
                 <div className="card-content">
                   <h3 className="card-title">{item.title}</h3>
                   <p className="card-text">{item.description}</p>
-                  <a href="https://example.com" className="card-button">
+                  <button
+                    className="card-button"
+                    onClick={() => handleEnSavoirPlus(item.id_produit)}
+                  >
                     En savoir plus
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
