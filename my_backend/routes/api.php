@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\CarouselController;
+use App\Http\Controllers\ServiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,3 +46,13 @@ Route::post('/carousels', [CarouselController::class, 'store']); // POST - ajout
 Route::get('/carousels/{id}', [CarouselController::class, 'show']); // GET - afficher un carousel
 Route::put('/carousels/{id}', [CarouselController::class, 'update']); // PUT - modifier un carousel
 Route::delete('/carousels/{id}', [CarouselController::class, 'destroy']); // DELETE - supprimer un carousel
+
+
+
+Route::get('/services', [ServiceController::class, 'index']);
+Route::post('/services', [ServiceController::class, 'store']);
+Route::post('/services/{id}', [ServiceController::class, 'update']); // avec _method=PUT
+Route::delete('/services/{id}', [ServiceController::class, 'destroy']);
+
+
+

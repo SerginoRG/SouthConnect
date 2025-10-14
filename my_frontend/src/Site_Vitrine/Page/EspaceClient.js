@@ -131,10 +131,10 @@ export default function EspaceClient() {
         <div className="services-header">
           <h2>Nos services</h2>
           <p>
-  {produit
-    ? `Découvrez les services proposés pour le produit "${produit.title || produit.nom_produit}".`
-    : "Chargement du produit..."}
-</p>
+            {produit
+              ? `Découvrez les services proposés pour le produit "${produit.title || produit.nom_produit}".`
+              : "Chargement du produit..."}
+          </p>
 
         </div>
         <div className="services-grid">
@@ -146,6 +146,24 @@ export default function EspaceClient() {
           ))}
         </div>
       </section>
+
+
+      {/* --- Section Article --- */} 
+      <section className="article-section"> 
+        <div className="article-container"> 
+          <div className="article-image"> 
+            <img src="/images/FlashPubs/raiky_3.jpg" alt="article" /> 
+          </div> 
+          <div className="article-text"> 
+            <h2>À propos de nous</h2> 
+            <p> Chez OUSI, nous croyons que chaque tasse de thé est une invitation au voyage. 
+              Notre salon de thé allie détente, convivialité et authenticité. Découvrez un espace
+               chaleureux où saveurs exotiques et douceurs artisanales se rencontrent pour éveiller
+                vos sens et apaiser votre esprit. 
+                </p> 
+                </div> 
+                </div> 
+          </section>
 
 
       {/* --- Section Contact --- */}

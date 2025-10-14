@@ -38,6 +38,7 @@
         .hero-subtitle-client{
       font-size: 1.5rem;
       margin-top: 10px;
+      
     }
 .hero-buttons {
   display: flex;
@@ -457,7 +458,21 @@
 .contact-form {
   animation: fadeInUp 0.8s ease-out;
 }
+/* scr/Styles/Espace.css */
 
+/* ... (conserver les règles existantes pour .hero-section-client, .hero-title-client, .hero-subtitle-client) */
+
+.hero-content-client {
+  /* Ajoutez ces deux lignes pour limiter la largeur et centrer le contenu */
+  max-width: 2099px; /* **Largeur maximale pour éviter de toucher les boutons** */
+  width: 100%; /* S'assure qu'il prend toute la largeur disponible jusqu'à max-width */
+  padding: 0 80px; /* **Marge de sécurité (espace) à gauche et à droite des boutons** */
+
+  /* Assurez-vous que le contenu reste centré par le conteneur flex parent */
+  text-align: center;
+}
+
+/* ... (conserver le reste du CSS) */
 /* Responsive Design amélioré */
 @media (max-width: 1200px) {
   .services-grid {

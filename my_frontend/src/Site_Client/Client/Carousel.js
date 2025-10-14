@@ -180,11 +180,48 @@ export default function CarrouselClient() {
             <h2>{editingId ? "Modifier un carousel" : "Ajouter un carousel"}</h2>
             <form onSubmit={handleSubmit} className="produit-form">
               <div className="produit-form-group">
-                <input type="text" placeholder="Titre du carousel" value={titre} onChange={(e) => setTitre(e.target.value)} required />
+               <input
+                type="text"
+                placeholder="Titre du carousel"
+                value={titre}
+                onChange={(e) => {
+                  const words = e.target.value.trim().split(/\s+/); // Sépare les mots
+                  if (words.length <= 5) {                        // Limite à 5 mots
+                    setTitre(e.target.value);
+                  } else {
+                    Swal.fire(
+                      "Attention",
+                      "Le titre ne peut pas dépasser 5 mots.",
+                      "warning"
+                    );
+                  }
+                }}
+                required
+              />
+
+
               </div>
               <div className="produit-form-group">
-                <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} required />
+                <textarea
+                  placeholder="Description"
+                  value={description}
+                  onChange={(e) => {
+                    const words = e.target.value.trim().split(/\s+/); // Sépare les mots
+                    if (words.length <= 10) {
+                      setDescription(e.target.value);
+                    } else {
+                      Swal.fire(
+                        "Attention",
+                        "La description ne peut pas dépasser 10 mots.",
+                        "warning"
+                      );
+                    }
+                  }}
+                  required
+                />
+                <p>{description.trim().split(/\s+/).length} / 10 mots</p> {/* compteur de mots */}
               </div>
+
               <div className="produit-form-group produit-file-input-wrapper">
                 <input type="file" accept="image/*" className="produit-file-input" id="file-upload" onChange={(e) => setImage(e.target.files[0])} />
                 <label htmlFor="file-upload" className="produit-file-label">Choisir une image</label>

@@ -1,16 +1,22 @@
 // src/Site_Client/ClientMenu/Menu.js
 import React, { useState, useEffect } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { FaBars, FaBox, FaVial, FaHome, FaSignOutAlt } from "react-icons/fa";
+import { FaBars, FaBox, FaVial, FaHome, FaSignOutAlt,FaImages,FaTools } from "react-icons/fa";
 import Swal from "sweetalert2";
 import axios from "axios";
 import "../../Styles/Menu.css";
 
 function Menu() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // <-- Ajoute ceci en haut, avec les autres useState
+
+const [openCarousel, setOpenCarousel] = useState(false);
+const [openService, setOpenService] = useState(false);
+
   const [clientEmail, setClientEmail] = useState("");
   const [clientId, setClientId] = useState(null);
   const [produits, setProduits] = useState([]);
+  
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -23,17 +29,14 @@ function Menu() {
     }
   }, []);
 
-  // 🔹 Charger les produits pour ce client
   useEffect(() => {
     if (clientId) {
       axios
         .get(`http://127.0.0.1:8000/api/produits/liste?client_id=${clientId}`)
-        .then((res) => {
-          setProduits(res.data);
-        })
-        .catch((err) => {
-          console.error("Erreur lors du chargement des produits", err);
-        });
+        .then((res) => setProduits(res.data))
+        .catch((err) =>
+          console.error("Erreur lors du chargement des produits", err)
+        );
     }
   }, [clientId]);
 
@@ -85,23 +88,26 @@ function Menu() {
               </li>
             ))}
 
-            {/* 🔹 Sous-menu Carousel avec produits */}
+            {/* Sous-menu déroulant Carousel avec produits */}
             <li>
-              <div className="menu-link">
-                <span className="menu-icon">
-                  <FaVial />
-                </span>
+             <div
+                className="menu-link"
+                onClick={() => setOpenCarousel((prev) => !prev)}
+                style={{ cursor: "pointer" }}
+              >
+                <span className="menu-icon"><FaImages /></span>
                 {open && <span className="menu-label">Carousel</span>}
+                {open && <span className={`arrow ${openCarousel ? "open" : ""}`}>▾</span>}
               </div>
+
               {open && (
-                <ul className="submenu">
+                <ul className={`submenu ${openCarousel ? "show" : ""}`}>
                   {produits.length > 0 ? (
                     produits.map((produit) => (
                       <li key={produit.id_produit}>
                         <Link to={`/client/dashboard/carrouselclient/${produit.id_produit}`}>
                           {produit.title}
                         </Link>
-
                       </li>
                     ))
                   ) : (
@@ -109,7 +115,42 @@ function Menu() {
                   )}
                 </ul>
               )}
+
             </li>
+
+
+            {/* Sous-menu déroulant Servise avec produits */}
+
+                <li>
+              <div
+                className="menu-link"
+                onClick={() => setOpenService((prev) => !prev)}
+                style={{ cursor: "pointer" }}
+              >
+                <span className="menu-icon"><FaTools /></span>
+                {open && <span className="menu-label">Service</span>}
+                {open && <span className={`arrow ${openService ? "open" : ""}`}>▾</span>}
+              </div>
+
+              {open && (
+                <ul className={`submenu ${openService ? "show" : ""}`}>
+                  {produits.length > 0 ? (
+                    produits.map((produit) => (
+                      <li key={produit.id_produit}>
+                        <Link to={`/client/dashboard/servicesclient/${produit.id_produit}`}>
+                          {produit.title}
+                        </Link>
+                      </li>
+                    ))
+                  ) : (
+                    <li>Aucun service</li>
+                  )}
+                </ul>
+              )}
+
+            </li>
+
+
           </ul>
         </nav>
 

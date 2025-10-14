@@ -19,6 +19,7 @@ import Menu from "./Site_Client/ClientMenu/Menu";
 import Produit from "./Site_Client/Client/Produit";
 import Test from "./Site_Client/Client/Test";
 import CarrouselClient from "./Site_Client/Client/Carousel";
+import Services from "./Site_Client/Client/Services";
 
 // Site Admin
 import Login from "./Site_Admin/Login/Login";
@@ -72,7 +73,7 @@ function App() {
             <Route path="produit" element={<Produit />} /> 
             <Route path="test" element={<Test />} />    
            <Route path="carrouselclient/:id_produit" element={<CarrouselClient />} />
-  
+           <Route path="servicesclient/:id_produit" element={<Services />} />
           </Route>
 
 
